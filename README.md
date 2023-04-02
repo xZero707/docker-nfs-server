@@ -56,14 +56,14 @@ This is the only containerized NFS server that offers **all** of the following f
 
 ### Starting the server
 
-Starting the `erichough/nfs-server` image will launch an NFS server. You'll need to supply some information upon container startup, which we'll cover below, but briefly speaking your `docker run` command might look something like this:
+Starting the `nlss/nfs-server` image will launch an NFS server. You'll need to supply some information upon container startup, which we'll cover below, but briefly speaking your `docker run` command might look something like this:
 
     docker run                                            \
       -v /host/path/to/shared/files:/some/container/path  \
       -v /host/path/to/exports.txt:/etc/exports:ro        \
       --cap-add SYS_ADMIN                                 \
       -p 2049:2049                                        \
-      erichough/nfs-server
+      nlss/nfs-server
 
 Let's break that command down into its individual pieces to see what's required for a successful server startup.
 
@@ -86,7 +86,7 @@ Let's break that command down into its individual pieces to see what's required 
           docker run                                      \
             -v /host/path/to/exports.txt:/etc/exports:ro  \
             ...                                           \
-            erichough/nfs-server
+            nlss/nfs-server
 
    1. provide each line of `/etc/exports` as an environment variable
 
@@ -96,14 +96,14 @@ Let's break that command down into its individual pieces to see what's required 
             -e NFS_EXPORT_0='/container/path/foo                  *(ro,no_subtree_check)'  \
             -e NFS_EXPORT_1='/container/path/bar 123.123.123.123/32(rw,no_subtree_check)'  \
             ...                                                                            \
-            erichough/nfs-server
+            nlss/nfs-server
 
    1. bake `/etc/exports` into a custom image
 
        e.g. in a `Dockerfile`:
 
        ```Dockerfile
-       FROM erichough/nfs-server
+       FROM nlss/nfs-server
        ADD /host/path/to/exports.txt /etc/exports
        ```
 
@@ -111,11 +111,11 @@ Let's break that command down into its individual pieces to see what's required 
 
    As noted in the [requirements](#requirements), the container will need additional privileges. So your `run` command will need *either*:
 
-       docker run --cap-add SYS_ADMIN ... erichough/nfs-server
+       docker run --cap-add SYS_ADMIN ... nlss/nfs-server
        
     or
 
-       docker run --privileged ... erichough/nfs-server
+       docker run --privileged ... nlss/nfs-server
 
     Not sure which to use? Go for `--cap-add SYS_ADMIN` as it's the lesser of two evils.
 
@@ -125,7 +125,7 @@ Let's break that command down into its individual pieces to see what's required 
 
    * If your clients connect via **NFSv4 only**, you can get by with just TCP port `2049`:
 
-         docker run -p 2049:2049 ... erichough/nfs-server
+         docker run -p 2049:2049 ... nlss/nfs-server
 
    * If you'd like to support **NFSv3**, you'll need to expose a lot more ports:
 
@@ -135,7 +135,7 @@ Let's break that command down into its individual pieces to see what's required 
            -p 32765:32765 -p 32765:32765/udp \
            -p 32767:32767 -p 32767:32767/udp \
            ...                               \
-           erichough/nfs-server
+           nlss/nfs-server
 
 If you pay close attention to each of the items in this section, the server should start quickly and be ready to accept your NFS clients.
 

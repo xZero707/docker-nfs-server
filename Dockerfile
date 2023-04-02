@@ -18,3 +18,5 @@ EXPOSE 2049
 # setup entrypoint
 COPY ./entrypoint.sh /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+LABEL maintainer="Aleksandar Puharic <aleksandar@puharic.com>"
