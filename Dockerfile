@@ -1,8 +1,8 @@
-ARG BUILD_FROM=alpine:latest
+ARG BUILD_FROM=alpine:3.17
 
 FROM $BUILD_FROM
 
-RUN apk --update --no-cache add bash nfs-utils && \
+RUN apk --update --no-cache add bash libcap-utils nfs-utils && \
                                                   \
     # remove the default config files
     rm -v /etc/idmapd.conf /etc/exports
