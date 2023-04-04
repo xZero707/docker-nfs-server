@@ -1,6 +1,11 @@
-ARG BUILD_FROM=alpine:3.15
+FROM scratch AS rootfs
 
-FROM $BUILD_FROM
+COPY ["./entrypoint.sh", "/usr/local/bin/"]
+
+
+
+# Main image
+FROM alpine:3.15
 
 # http://wiki.linux-nfs.org/wiki/index.php/Nfsv4_configuration
 RUN set -eux \
@@ -11,10 +16,8 @@ RUN set -eux \
     && echo "rpc_pipefs  /var/lib/nfs/rpc_pipefs  rpc_pipefs  defaults  0  0" >> /etc/fstab \
     && echo "nfsd        /proc/fs/nfsd            nfsd        defaults  0  0" >> /etc/fstab
 
-EXPOSE 2049
-
-# setup entrypoint
-COPY ./entrypoint.sh /usr/local/bin
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
+COPY --from=rootfs ["/", "/"]
 LABEL maintainer="Aleksandar Puharic <aleksandar@puharic.com>"
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+EXPOSE 2049
