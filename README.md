@@ -1,7 +1,9 @@
-# erichough/nfs-server
+# nlss/nfs-server
 
 A lightweight, robust, flexible, and containerized NFS server.
 
+
+*Stand-alone fork of [ehough/docker-nfs-server](https://github.com/ehough/docker-nfs-server).*
 ## Why?
 
 This is the only containerized NFS server that offers **all** of the following features:
